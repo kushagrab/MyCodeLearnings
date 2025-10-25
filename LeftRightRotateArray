@@ -1,0 +1,125 @@
+#include <iostream>
+using namespace std;
+
+int rightRotate(int arr[],int k,int n) 
+{
+    if(k%n == 0)
+        return 0;
+    else
+        k = k%n;
+        
+    int temp[k] = {};
+    
+    int idx = 0;
+    for(int i=n-k;i<n;i++)
+    {
+        temp[idx] = arr[i];
+        idx++;
+    }
+    
+    for(int i=n-k-1;i>=0;i--)
+    {
+        arr[i+k] = arr[i];
+    }
+    
+    for(int i=0;i<k;i++)
+    {
+        arr[i] = temp[i];
+    }
+    
+    return 0;
+
+}
+int leftRotate(int arr[],int k,int n) 
+{
+    if(k%n == 0)
+        return 0;
+    else
+        k = k%n;
+        
+    int temp[k] = {};
+    
+    for(int i=0;i<k;i++)
+    {
+        temp[i] = arr[i];
+    }
+    
+    for(int i=k;i<n;i++)
+    {
+        arr[i-k] = arr[i];
+    }
+    
+    for(int i=0;i<k;i++)
+    {
+        arr[n-k+i] = temp[i];
+    }
+    
+    return 0;
+}
+int reverseArr(int arr[],int start,int end)
+{
+    while(start<=end)
+    {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+    
+    return 0;
+}
+
+int rightRotateByReverse(int arr[],int k,int n) 
+{
+    if(k%n == 0)
+        return 0;
+    else
+        k = k%n;
+        
+    reverseArr(arr,0,n-k-1);
+    reverseArr(arr,n-k,n-1);
+    reverseArr(arr,0,n-1);
+    return 0;
+}
+int leftRotateByReverse(int arr[],int k,int n) 
+{
+    if(k%n == 0)
+        return 0;
+    else
+        k = k%n;
+        
+    reverseArr(arr,0,k-1);
+    reverseArr(arr,k,n-1);
+    reverseArr(arr,0,n-1);
+    return 0;
+}
+
+void printArray(int arr[],int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int arr[]  = {1,2,3,4,5,6};
+    int arr1[] = {1,2,3,4,5,6};
+    int arr2[] = {1,2,3,4,5,6};
+    int arr3[] = {1,2,3,4,5,6};
+    
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int k;
+    cout << "K value : " << endl;
+    cin >> k;
+
+    leftRotate(arr,k,n); printArray(arr,n);
+    leftRotateByReverse(arr3,k,n); printArray(arr3,n);
+    rightRotate(arr1,k,n); printArray(arr1,n);
+    rightRotateByReverse(arr2,k,n); printArray(arr2,n);
+
+    return 0;
+}
