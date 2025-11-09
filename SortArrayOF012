@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+    vector<int> nums =          {0,1,1,2,2,0,0,2,1,2,0,0,0};
+    //0,0,0,0,0,0,   1,1,1,1,1,1,1,1    unsorted    2,2,2,2,2,2,2,2
+    //0....low-1     low.......mid-1   mid....high  high+1......n-1
+    int n = nums.size()-1;
+    int low = 0;
+    int mid = 0;
+    int high = n;
+    while(mid < high)
+    {
+        if(nums[mid] == 0)
+        {
+            swap(nums[mid],nums[low]); 
+            mid++;
+            low++;
+        }
+        
+        if(nums[mid] == 1)
+        {
+            mid++;
+        }
+        
+        if(nums[mid] == 2)
+        {
+            swap(nums[mid],nums[high]);
+            high--;
+        }    
+    }
+    
+    for(auto idx : nums)
+    {
+        cout << idx << " " ;
+    }
+    return 0;
+}
