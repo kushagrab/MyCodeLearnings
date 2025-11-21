@@ -1,0 +1,126 @@
+#include <iostream>
+#include <bits/stdc++.h>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
+using namespace std;
+
+//O(n3*log(n))
+vector<vector<int>> FourSUM_BruteForce(vector<int> nums, int target)
+{
+    //{1,0,-1,0,-2,2};
+    set<vector<int>> uniqueRes;
+    for(int i=0;i<=nums.size()-4;i++)
+    {
+        for(int j=i+1;j<=nums.size()-3;j++)
+        {
+            for(int k=j+1;k<=nums.size()-2;k++)
+            {
+                for(int l=k+1;l<=nums.size()-1;l++)
+                {
+                    if(nums[i] + nums[j] + nums[k] + nums[l] == target)
+                    {
+                        vector<int> temp = {nums[i],nums[j],nums[k],nums[l]};
+                        sort(temp.begin(),temp.end());
+                        uniqueRes.insert(temp);
+                    }
+                }
+            }
+        }
+    }
+    
+    vector<vector<int>> ans(uniqueRes.begin(),uniqueRes.end());
+    return ans;
+}
+
+//O(n2*log(n))
+vector<vector<int>> FourSUM_Hashing(vector<int> nums,int target)
+{
+    set<vector<int>> uniqueRes;
+    for(int i=0;i<nums.size();i++)
+    {
+        for(int j=i+1;j<nums.size();j++)
+        {
+            set<int> rem;
+            for(int l=j+1;l<nums.size();l++)
+            {
+                int k = target-(nums[i]+nums[j]+nums[l]);
+                if(rem.find(k) != rem.end())
+                {
+                    vector<int> temp = {nums[i],nums[j],k,nums[l]};
+                    sort(temp.begin(),temp.end());
+                    uniqueRes.insert(temp);
+                }
+            
+                rem.insert(nums[l]);
+            }
+        }
+    }
+    
+    vector<vector<int>> ans(uniqueRes.begin(),uniqueRes.end());
+    return ans;    
+}
+
+vector<vector<int>> FourSUM_2PointerApproach(vector<int> nums, int target)
+{
+    int n = nums.size();
+    sort(nums.begin(),nums.end());
+    vector<vector<int>> ans;
+    for(int i=0;i<n;i++)
+    {
+        if(i>0 && nums[i] == nums[i-1]) { continue; }
+        for(int j=i+1;j<n;j++)
+        {
+            if(j>i+1 && nums[j] == nums[j-1]) { continue; } 
+            int k=j+1;
+            int l=n-1;
+            while(k<l)
+            {   
+                int sum = nums[i] + nums[j] + nums[k] + nums[l];
+                if(sum < target) 
+                {    
+                    k++; 
+                }
+                else if(sum > target) 
+                {     
+                    l--; 
+                }
+                if(sum == target) 
+                {
+                    vector<int> temp = {nums[i],nums[j],nums[k],nums[l]};
+                    ans.push_back(temp);
+                    k++;
+                    l--;
+                    while(k<l && nums[k] == nums[k-1]) { k++; }
+                    while(k<l && nums[l] == nums[l+1]) { l--; }
+                }      
+            }
+        }
+    }
+    
+    return ans;
+}
+
+int main()
+{
+    vector<int> nums = {2,2,2,2,2};
+    vector<vector<int>> triplet  = FourSUM_BruteForce(nums,8);
+    vector<vector<int>> triplet1 = FourSUM_Hashing(nums,8);
+    vector<vector<int>> triplet2 = FourSUM_2PointerApproach(nums,8);
+    
+    for (auto &triplet : triplet) {
+        for (auto &num : triplet) cout << num << " ";
+        cout << endl;
+    }
+
+    for (auto &triplet : triplet1) {
+        for (auto &num : triplet) cout << num << " ";
+        cout << endl;
+    }
+    
+    for (auto &triplet : triplet2) {
+        for (auto &num : triplet) cout << num << " ";
+        cout << endl;
+    }
+}
+
